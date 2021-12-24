@@ -16,11 +16,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println("here 0")
 	// grab command line args
-	setConfigPath := flag.String("word", "", "Path for where timelog file is stored")
+	setConfigPath := flag.String("set-path", "", "Path for where timelog file is stored")
 	flag.Parse()
-	fmt.Println("here 0.5")
 
 	// open cofig file
 	f, err := os.OpenFile(homeDir+"/.logtime", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -29,7 +27,6 @@ func main() {
 		os.Exit(1)
 	}
 	defer f.Close()
-	fmt.Println("here 0.75")
 
 	timeLogPath, err := ioutil.ReadFile(homeDir + "/.logtime")
 	if err != nil {
@@ -38,13 +35,11 @@ func main() {
 	}
 	// write default path if not set
 	if len(timeLogPath) == 0 {
-		fmt.Println("here 1")
 		timeLogPath = []byte(homeDir + "/timelog.txt")
 		_, err = f.WriteString(homeDir + "/timelog.txt")
 		if err != nil {
 			fmt.Printf("Error writing to config file: %s", err)
 		}
-		fmt.Println("here 2")
 	}
 	// check if we are setting timelog file locationgo env
 	var toLog []string
@@ -56,7 +51,7 @@ func main() {
 			fmt.Printf("Error writing to ~/.logtime file: %s", err)
 			os.Exit(1)
 		}
-		timeLogPath = []byte(*setConfigPath)
+		timeLogPath = []byte(*setConfigPath + "/timelog.txt")
 	} else {
 		toLog = os.Args[1:]
 	}
